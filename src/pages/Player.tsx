@@ -15,7 +15,7 @@ export function Player() {
           </button>
         </div>
         <main className="relative flex overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow pr-80">
-        <VideoPlayer />
+        <VideoPlayer url="https://www.youtube.com/watch?v=CcNo07Xp8aQ"/>
         <Aside />
         </main>
       </div>

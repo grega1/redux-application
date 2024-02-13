@@ -1,6 +1,8 @@
 import ReactPlayer from "react-player";
-
-export function VideoPlayer() {
+interface VideoPlayerProps{
+  url:string,
+}
+export function VideoPlayer({url}:VideoPlayerProps) {
   return (
     <div className="flex-1">
       <div className="w-full bg-zinc-500 aspect-video">
@@ -8,7 +10,7 @@ export function VideoPlayer() {
           width="100%"
           height="100%"
           controls
-          url="https://www.youtube.com/watch?v=CcNo07Xp8aQ"
+          url={url}
         />
       </div>
     </div>
