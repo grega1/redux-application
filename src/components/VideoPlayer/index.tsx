@@ -1,8 +1,15 @@
 import ReactPlayer from "react-player";
-interface VideoPlayerProps{
-  url:string,
-}
-export function VideoPlayer({url}:VideoPlayerProps) {
+import { useAppSelector } from "../../store";
+
+export function VideoPlayer() {
+  const lesson= useAppSelector(state=>{
+    const {currentModuleIndex, currentLessonIndex} = state.player;
+    const currentLesson=state.player.course.modules[currentModuleIndex]?.lessons[currentLessonIndex];
+
+    console.log(currentLesson)
+    return currentLesson
+  })
+ 
   return (
     <div className="flex-1">
       <div className="w-full bg-zinc-500 aspect-video">
@@ -10,7 +17,7 @@ export function VideoPlayer({url}:VideoPlayerProps) {
           width="100%"
           height="100%"
           controls
-          url={url}
+          url={`https://www.youtube.com/watch?v=${lesson.id}`}
         />
       </div>
     </div>
