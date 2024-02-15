@@ -6,7 +6,6 @@ export function VideoPlayer() {
     const {currentModuleIndex, currentLessonIndex} = state.player;
     const currentLesson=state.player.course.modules[currentModuleIndex]?.lessons[currentLessonIndex];
 
-    console.log(currentLesson)
     return currentLesson
   })
  
