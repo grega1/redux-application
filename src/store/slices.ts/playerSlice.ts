@@ -1,9 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-type LessonType={
-    id:string,
-    title:string,
-    duration:string,
-}
+
 const playerSlice = createSlice({
   name: "player",
   initialState: {
@@ -81,22 +77,18 @@ const playerSlice = createSlice({
       state.currentModuleIndex = action.payload[0];
       state.currentLessonIndex = action.payload[1];
     },
-    next: (state:LessonType) => {
-      const nextLessonIndex = state.currentLessonIndex + 1;
-      const nextLesson =
-        state.course.modules[state.currentModuleIndex].lessons[nextLessonIndex];
-      const nextModule = state.currentModuleIndex + 1;
-      const nextModuleIndex = state.course.modules[nextModule];
-
-      if (nextLesson) {
-        state.currentLessonIndex = nextLesson;
-      } else {
-        if (nextModule) {
+    next: (state) => {
+        const nextLessonIndex = state.currentLessonIndex + 1;
+        const currentModule = state.course.modules[state.currentModuleIndex];
+        const nextModuleIndex = state.currentModuleIndex + 1;
+      
+        if (nextLessonIndex < currentModule.lessons.length) {
+          state.currentLessonIndex = nextLessonIndex;
+        } else if (nextModuleIndex < state.course.modules.length) {
           state.currentModuleIndex = nextModuleIndex;
           state.currentLessonIndex = 0;
         }
-      }
-    },
+      },
   },
 });
 
