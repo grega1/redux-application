@@ -2,7 +2,6 @@ import { MessageCircle } from "lucide-react";
 import { Aside } from "../components/Aside/index.tsx"
 import { VideoPlayer } from "../components/VideoPlayer";
 import { Header } from "../components/Header";
-import { useAppSelector } from "../store/index.ts";
 
 export function Player() {
    

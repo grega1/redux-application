@@ -1,14 +1,12 @@
-import { useAppSelector } from "../../store";
+import { useEffect } from "react";
+import { useCurrentLesson } from "../../store/slices.ts/playerSlice";
 
 export function Header() {
-  const {currentLesson, currentModule}= useAppSelector(state=>{
-    const {currentModuleIndex, currentLessonIndex} = state.player;
+  const {currentLesson, currentModule}= useCurrentLesson();
 
-    const currentModule= state.player.course.modules[currentModuleIndex];
-    const currentLesson=currentModule.lessons[currentLessonIndex];
-
-    return {currentLesson, currentModule}
-  })
+  useEffect(()=>{
+    document.title=`Watching ${currentLesson}`;
+  },[currentLesson])
   return (
     
       <div className="flex flex-col gap1">
