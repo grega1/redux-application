@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import { player } from "./slices.ts/playerSlice";
+import { player } from "./slices/playerSlice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 

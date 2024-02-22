@@ -4,7 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { Lesson } from "../Lesson";
 import { useAppSelector } from "../../store";
 import { useDispatch } from "react-redux";
-import { play } from "../../store/slices.ts/playerSlice";
+import { play } from "../../store/slices/playerSlice";
 interface ModuleProps {
   moduleIndex: number;
   title: string;
