@@ -4,6 +4,7 @@ import { VideoPlayer } from "../components/VideoPlayer";
 import { Header } from "../components/Header";
 
 export function Player() {
+   
   return (
     <div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center">
       <div className="flex w-[1100px] flex-col gap-6">
@@ -15,7 +16,7 @@ export function Player() {
           </button>
         </div>
         <main className="relative flex overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow pr-80">
-        <VideoPlayer />
+        <VideoPlayer/>
         <Aside />
         </main>
       </div>
