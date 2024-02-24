@@ -1,11 +1,12 @@
 import { it, expect, describe } from "vitest";
-import { playerSlice, player, play, next} from "./playerSlice";
+import { playerSlice, player, play, next, PlayerState} from "./playerSlice";
 
-const initialState = {
+const initialState:PlayerState = {
     course: {
+        id:"1",{
       modules: [
         {
-          id: "1",
+          id: 1,
           title: "Exploring Redux",
           lessons: [
             {
@@ -22,7 +23,7 @@ const initialState = {
           ],
         },
         {
-          id: "2",
+          id: 2,
           title: "Exploring Redux",
           lessons: [
             {
@@ -42,6 +43,7 @@ const initialState = {
     currentModuleIndex: 0,
     currentLessonIndex: 0,
   }
+}
 describe("player slice", () => {
   it("should be able to play a video", () => {
    const state = player(initialState,play([1,1]))

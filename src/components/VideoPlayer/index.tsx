@@ -19,7 +19,7 @@ export function VideoPlayer() {
           playing
           onEnded={handleNextVideo}
           controls
-          url={`https://www.youtube.com/watch?v=${currentLesson.id}`}
+          url={`https://www.youtube.com/watch?v=${currentLesson?.id}`}
         />
       </div>
     </div>
