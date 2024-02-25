@@ -2,8 +2,9 @@ import { it, expect, describe } from "vitest";
 import { playerSlice, player, play, next, PlayerState} from "./playerSlice";
 
 const initialState:PlayerState = {
+   
     course: {
-        id:"1",{
+        id:"1",
       modules: [
         {
           id: 1,
@@ -43,7 +44,6 @@ const initialState:PlayerState = {
     currentModuleIndex: 0,
     currentLessonIndex: 0,
   }
-}
 describe("player slice", () => {
   it("should be able to play a video", () => {
    const state = player(initialState,play([1,1]))

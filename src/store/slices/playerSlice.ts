@@ -1,29 +1,37 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { useAppSelector } from "..";
+import { api } from "../../lib/axio";
 
 interface Course {
-  id:number,
-  modules:Array<{
-    id:number,
-    title:string,
-    lessons:Array<{
-      id:string,
-      title:string,
-      duration:string,
-    }>
-  }>
-
+  id: string;
+  modules: Array<{
+    id: number;
+    title: string;
+    lessons: Array<{
+      id: string;
+      title: string;
+      duration: string;
+    }>;
+  }>;
 }
 export interface PlayerState {
-  course:Course | null,
-  currentModuleIndex:number,
-  currentLessonIndex:number,
+  course: Course | null;
+  currentModuleIndex: number;
+  currentLessonIndex: number;
 }
-const initialState:PlayerState={
-  course:null,
-  currentModuleIndex:0,
-  currentLessonIndex:0,
-}
+const initialState: PlayerState = {
+  course: null,
+  currentModuleIndex: 0,
+  currentLessonIndex: 0,
+};
+
+export const loadCourse = createAsyncThunk("player/load", async () => {
+
+  
+  const response = await api.get("/courses/1");
+  console.log("response data")
+  return response.data;
+});
 
 export const playerSlice = createSlice({
   name: "player",
@@ -35,16 +43,24 @@ export const playerSlice = createSlice({
     },
     next: (state) => {
       const nextLessonIndex = state.currentLessonIndex + 1;
-      const currentModule = state.course?.modules[state.currentModuleIndex];
       const nextModuleIndex = state.currentModuleIndex + 1;
-
-      if (nextLessonIndex < currentModule.lessons.length) {
-        state.currentLessonIndex = nextLessonIndex;
-      } else if (nextModuleIndex < state.course?.modules.length) {
-        state.currentModuleIndex = nextModuleIndex;
-        state.currentLessonIndex = 0;
+      if (state.course) {
+        if (
+          nextLessonIndex <
+          state.course?.modules[state.currentModuleIndex].lessons.length
+        ) {
+          state.currentLessonIndex = nextLessonIndex;
+        } else if (nextModuleIndex < state.course.modules.length) {
+          state.currentModuleIndex = nextModuleIndex;
+          state.currentLessonIndex = 0;
+        }
       }
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(loadCourse.fulfilled, (state, action) => {
+      state.course = action.payload;
+    });
   },
 });
 
