@@ -43,6 +43,7 @@ const initialState:PlayerState = {
     },
     currentModuleIndex: 0,
     currentLessonIndex: 0,
+    isLoading:true,
   }
 describe("player slice", () => {
   it("should be able to play a video", () => {
