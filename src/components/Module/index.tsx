@@ -2,23 +2,26 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 
 import { ChevronDown } from "lucide-react";
 import { Lesson } from "../Lesson";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { loadCourse, play } from "../../store/slices/playerSlice";
-import { useEffect } from "react";
+import { useStore } from "../../zustand-store";
+
 interface ModuleProps {
   moduleIndex: number;
   title: string;
   amountOfLessons: number;
 }
 export function Module({ title, moduleIndex, amountOfLessons }: ModuleProps) {
-  const lessons = useAppSelector((state) => state.player.course?.modules[moduleIndex].lessons);
-  const {currentModuleIndex, currentLessonIndex}= useAppSelector(state=>{
-    const {currentModuleIndex, currentLessonIndex} = state.player;
+  const { currentModuleIndex, currentLessonIndex, lessons, play} = useStore(
+    (state) => {
+      return {
+        lessons: state.course?.modules[moduleIndex].lessons,
+        currentLessonIndex: state.currentLessonIndex,
+        currentModuleIndex: state.currentModuleIndex,
+        play:state.play,
+        
+      };
+    }
+  );
 
-    return {currentModuleIndex, currentLessonIndex}
-  })
-  
-const dispatch = useAppDispatch()
 
 
   return (
@@ -36,15 +39,24 @@ const dispatch = useAppDispatch()
         <ChevronDown className="w-4 h-4 ml-auto text-zinc-400 group-data-[state=open]:rotate-180 transition-transform" />
       </Collapsible.Trigger>
       <Collapsible.Content>
-      {lessons && lessons.map((lesson, lessonIndex)=>{
-        const isCurrent = currentModuleIndex === moduleIndex && currentLessonIndex === lessonIndex
-        return (
-        <Lesson key={lesson.id} 
-        title={lesson.title} 
-        duration={lesson.duration} 
-        isCurrent={isCurrent}
-        onPlay={()=> dispatch(play([moduleIndex, lessonIndex]))}/>)})}
-      </Collapsible.Content >
+        {lessons &&
+          lessons.map((lesson, lessonIndex) => {
+            const isCurrent =
+              currentModuleIndex === moduleIndex &&
+              currentLessonIndex === lessonIndex;
+            return (
+              <Lesson
+                key={lesson.id}
+                title={lesson.title}
+                duration={lesson.duration}
+                isCurrent={isCurrent}
+                onPlay={() => 
+                  play([moduleIndex, lessonIndex])
+                }
+              />
+            );
+          })}
+      </Collapsible.Content>
     </Collapsible.Root>
   );
 }

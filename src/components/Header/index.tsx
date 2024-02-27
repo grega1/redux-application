@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useCurrentLesson } from "../../store/slices/playerSlice";
+import { useCurrentLesson } from "../../zustand-store";
+
 
 export function Header() {
   const {currentLesson, currentModule}= useCurrentLesson();

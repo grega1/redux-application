@@ -3,14 +3,14 @@ import { Aside } from "../components/Aside/index.tsx";
 import { VideoPlayer } from "../components/VideoPlayer";
 import { Header } from "../components/Header";
 import { useEffect } from "react";
-import { useAppDispatch } from "../store/index.ts";
-import { loadCourse } from "../store/slices/playerSlice.ts";
+import { useStore } from "../zustand-store/index.ts";
+
 
 export function Player() {
-  const dispatch = useAppDispatch();
+  const load = useStore(state => state.load);
 
   useEffect(() => {
-    dispatch(loadCourse());
+    (load());
   }, []);
 
   return (
