@@ -68,12 +68,23 @@ describe("Zustand store", () => {
   it("should be able to play a next module", () => {
     useStore.setState({ course });
     const { next } = useStore.getState();
-    useStore.setState({ currentLessonIndex: 2, currentModuleIndex: 0 });
+    useStore.setState({ currentLessonIndex: 1, currentModuleIndex: 0 });
     next();
 
     const { currentLessonIndex, currentModuleIndex } = useStore.getState();
 
     expect(currentModuleIndex).toEqual(1);
     expect(currentLessonIndex).toEqual(0);
+  });
+  it("should not be able to jump to the next module if there is no next module available", () => {
+    useStore.setState({ course });
+    const { next } = useStore.getState();
+    useStore.setState({ currentLessonIndex: 1, currentModuleIndex: 1 });
+    next();
+
+    const { currentLessonIndex, currentModuleIndex } = useStore.getState();
+
+    expect(currentModuleIndex).toEqual(1);
+    expect(currentLessonIndex).toEqual(1);
   });
 });
