@@ -1,78 +1,42 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { useAppSelector } from "..";
+import { api } from "../../lib/axio";
+
+interface Course {
+  id: string;
+  modules: Array<{
+    id: number;
+    title: string;
+    lessons: Array<{
+      id: string;
+      title: string;
+      duration: string;
+    }>;
+  }>;
+}
+export interface PlayerState {
+  course: Course | null;
+  currentModuleIndex: number;
+  currentLessonIndex: number;
+  isLoading:boolean;
+}
+const initialState: PlayerState = {
+  course: null,
+  currentModuleIndex: 0,
+  currentLessonIndex: 0,
+  isLoading:true,
+};
+
+export const loadCourse = createAsyncThunk("player/load", async () => {
+
+  
+  const response = await api.get("/courses/1");
+  return response.data;
+});
 
 export const playerSlice = createSlice({
   name: "player",
-  initialState: {
-    course: {
-      modules: [
-        {
-          id: "1",
-          title: "Exploring Redux",
-          lessons: [
-            {
-              id: "8jx96lzHNJE",
-              title: "Initial",
-              duration: "14:20",
-            },
-            {
-              id: "SbCedTlJWTs",
-              title: "Initial",
-              duration: "14:20",
-            },
-            {
-              id: "SO8lBVWF2Y8",
-              title: "Initial",
-              duration: "14:20",
-            },
-            {
-              id: "novnyCaa7To",
-              title: "Initial",
-              duration: "14:20",
-            },
-            {
-              id: "vxkbf5QMA2g",
-              title: "Initial",
-              duration: "14:20",
-            },
-          ],
-        },
-        {
-          id: "2",
-          title: "Exploring Redux",
-          lessons: [
-            {
-              id: "8jx96lzHNJE",
-              title: "Initial",
-              duration: "14:20",
-            },
-            {
-              id: "SbCedTlJWTs",
-              title: "Initial",
-              duration: "14:20",
-            },
-            {
-              id: "SO8lBVWF2Y8",
-              title: "Initial",
-              duration: "14:20",
-            },
-            {
-              id: "novnyCaa7To",
-              title: "Initial",
-              duration: "14:20",
-            },
-            {
-              id: "vxkbf5QMA2g",
-              title: "Initial",
-              duration: "14:20",
-            },
-          ],
-        },
-      ],
-    },
-    currentModuleIndex: 0,
-    currentLessonIndex: 0,
-  },
+  initialState,
   reducers: {
     play: (state, action: PayloadAction<[number, number]>) => {
       state.currentModuleIndex = action.payload[0];
@@ -80,16 +44,28 @@ export const playerSlice = createSlice({
     },
     next: (state) => {
       const nextLessonIndex = state.currentLessonIndex + 1;
-      const currentModule = state.course.modules[state.currentModuleIndex];
       const nextModuleIndex = state.currentModuleIndex + 1;
-
-      if (nextLessonIndex < currentModule.lessons.length) {
-        state.currentLessonIndex = nextLessonIndex;
-      } else if (nextModuleIndex < state.course.modules.length) {
-        state.currentModuleIndex = nextModuleIndex;
-        state.currentLessonIndex = 0;
+      if (state.course) {
+        if (
+          nextLessonIndex <
+          state.course?.modules[state.currentModuleIndex].lessons.length
+        ) {
+          state.currentLessonIndex = nextLessonIndex;
+        } else if (nextModuleIndex < state.course.modules.length) {
+          state.currentModuleIndex = nextModuleIndex;
+          state.currentLessonIndex = 0;
+        }
       }
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(loadCourse.fulfilled, (state, action) => {
+      state.course = action.payload;
+      state.isLoading = false;
+    });
+    builder.addCase(loadCourse.pending, (state)=>{
+      state.isLoading = true;
+    })
   },
 });
 
@@ -101,8 +77,8 @@ export const useCurrentLesson = () => {
   return useAppSelector((state) => {
     const { currentModuleIndex, currentLessonIndex } = state.player;
 
-    const currentModule = state.player.course.modules[currentModuleIndex];
-    const currentLesson = currentModule.lessons[currentLessonIndex];
+    const currentModule = state.player.course?.modules[currentModuleIndex];
+    const currentLesson = currentModule?.lessons[currentLessonIndex];
 
     return { currentLesson, currentModule };
   });
